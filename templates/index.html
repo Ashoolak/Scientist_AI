@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPT-4 Question Answering</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        padding-top: 40px;
+        background-color: #f8f9fa;
+        font-family: 'Arial', sans-serif;
+      }
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+      h1 {
+        color: #333;
+      }
+      textarea {
+        resize: none; /* Disables resizing */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Ask a Question</h1>
+      <form method="post">
+        <div class="form-group">
+          <textarea
+            name="question"
+            class="form-control"
+            rows="4"
+            placeholder="Enter your question here..."
+          >
+{{ question }}</textarea
+          >
+        </div>
+        <button type="submit" class="btn btn-primary">Ask</button>
+      </form>
+      {% if answer %}
+      <div class="mt-4">
+        <h2>Answer:</h2>
+        <p class="answer">{{ answer }}</p>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
