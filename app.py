@@ -3,8 +3,11 @@ from openai import OpenAI
 from logics.quantum_logic import handle_quantum_query
 import re
 import ast
+import os
 
-client = OpenAI(api_key='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')
+api_key = os.getenv("OPENAI_KEY")
+
+client = OpenAI(api_key)
 
 
 app = Flask(__name__)
