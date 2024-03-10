@@ -1,13 +1,16 @@
 from flask import Flask, request, render_template
 from openai import OpenAI
 from logics.quantum_logic import handle_quantum_query
+from dotenv import load_dotenv
 import re
 import ast
 import os
 
+load_dotenv()
+
 api_key = os.getenv("OPENAI_KEY")
 
-client = OpenAI(api_key)
+client = OpenAI(api_key=api_key)
 
 
 app = Flask(__name__)
