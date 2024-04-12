@@ -28,7 +28,9 @@
             class="form-control"
             rows="4"
             placeholder="Enter your question here..."
-          ></textarea>
+          >
+{{ question }}</textarea
+          >
         </div>
         <button type="submit" class="btn btn-primary">Ask</button>
       </form>
@@ -46,12 +48,34 @@
         <button onclick="clearEditor()" class="btn btn-primary">Clear</button>
       </div>
     </div>
+    <div class="container">
+      <h1>Results</h1>
+      <div
+        id="results"
+        style="
+          white-space: pre-wrap;
+          background: #f4f4f4;
+          padding: 10px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+          min-height: 100px;
+        "
+      ></div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
     <script>
       var editor = ace.edit('codeBlock');
       editor.setTheme('ace/theme/monokai');
       editor.session.setMode('ace/mode/python');
       editor.setOptions({ fontSize: '12pt', wrap: true });
+
+      window.onload = function () {
+        document.getElementById('loader').style.display = 'none';
+        var initialCode = '{{ code | tojson | safe }}';
+        if (initialCode) {
+          editor.setValue(initialCode.replace(/^"|"$/g, ''), -1); // Strip surrounding quotes
+        }
+      };
 
       function showLoader() {
         document.getElementById('loader').style.display = 'block';
@@ -87,28 +111,23 @@
           .then((data) => {
             if (data.error) {
               console.error('Error:', data.error);
-              editor.setValue(data.error, -1); // Display errors in the editor
+              document.getElementById('results').innerText =
+                'Error: ' + data.error;
             } else {
-              editor.setValue(data.output, -1); // Display the output in the editor
+              document.getElementById('results').innerText = data.output;
             }
+            hideLoader();
           })
           .catch((error) => {
             console.error('Error:', error);
+            document.getElementById('results').innerText = 'Error: ' + error;
+            hideLoader();
           });
-        hideLoader();
       }
 
       function clearEditor() {
         editor.setValue('');
       }
-
-      window.onload = function () {
-        document.getElementById('loader').style.display = 'none';
-        var initialCode = '{{ code | tojson | safe }}';
-        if (initialCode && initialCode !== 'null') {
-          editor.setValue(initialCode, -1);
-        }
-      };
     </script>
   </body>
 </html>
