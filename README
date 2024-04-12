@@ -1,0 +1,8 @@
+# Install NumPy and SciPy
+pip install numpy scipy
+
+# Install Matplotlib (optional, for plotting)
+pip install matplotlib
+
+# Install QuTiP
+pip install qutip

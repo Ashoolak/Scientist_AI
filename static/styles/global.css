@@ -1,0 +1,72 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  padding-top: 40px;
+  background: radial-gradient(
+    ellipse at center,
+    #3759b7 0%,
+    #011d70 40%,
+    #010e45 70%,
+    #000022 100%
+  );
+  color: #fff;
+}
+
+.container h1 {
+  font-size: 38px;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.container button {
+  background: linear-gradient(
+    145deg,
+    #3498db,
+    #2980b9
+  ); /* Gradient background */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow for 3D effect */
+}
+
+.container button:hover,
+.container button:active {
+  background: linear-gradient(
+    145deg,
+    #2980b9,
+    #3498db
+  ); /* Inverts gradient on hover/active */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); /* Larger shadow for hover/active */
+}
+
+/* Ensures the loader doesn't interfere visually */
+#loader {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 8px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  border-top: 8px solid #3498db;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

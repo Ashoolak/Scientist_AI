@@ -1,0 +1,5 @@
+{
+  "questions": {
+    "question 1": "I have a quantum optics problem to solve. consider a single qubit quantum system is driven by markovian noise described by  lindbladian equation:  d\rho/dt = -i[X,\rho]+0.5 Z \rho Z- 0.5\rho. Use QuTip to Canculate the density matrix \rho at time t=2. The qubit is initialy in the ground state |0> at t=0. Only output the number. Think through and do it step by step."
+  }
+}

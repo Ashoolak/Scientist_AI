@@ -3,58 +3,112 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GPT-4 Question Answering</title>
-    <!-- Bootstrap CSS -->
+    <title>Physicist AI</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="{{ url_for('static', filename='styles/global.css') }}"
+      rel="stylesheet"
+    />
     <link
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <style>
-      body {
-        padding-top: 40px;
-        background-color: #f8f9fa;
-        font-family: 'Arial', sans-serif;
-      }
-      .container {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-      .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-      }
-      h1 {
-        color: #333;
-      }
-      textarea {
-        resize: none; /* Disables resizing */
-      }
-    </style>
   </head>
   <body>
+    <div id="loader"></div>
     <div class="container">
       <h1>Ask a Question</h1>
-      <form method="post">
+      <form method="post" onsubmit="showLoader();">
         <div class="form-group">
           <textarea
             name="question"
             class="form-control"
             rows="4"
             placeholder="Enter your question here..."
-          >
-{{ question }}</textarea
-          >
+          ></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Ask</button>
       </form>
-      {% if answer %}
-      <div class="mt-4">
-        <h2>Answer:</h2>
-        <p class="answer">{{ answer }}</p>
-      </div>
-      {% endif %}
     </div>
+    <div class="container">
+      <h1>Code Console</h1>
+      <div id="codeBlock" style="height: 400px; width: 100%"></div>
+      <div class="button-group" style="margin-top: 10px">
+        <button onclick="executeCode()" class="btn btn-success">
+          Run Code
+        </button>
+        <button onclick="copyToClipboard()" class="btn btn-primary">
+          Copy to Clipboard
+        </button>
+        <button onclick="clearEditor()" class="btn btn-primary">Clear</button>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script>
+      var editor = ace.edit('codeBlock');
+      editor.setTheme('ace/theme/monokai');
+      editor.session.setMode('ace/mode/python');
+      editor.setOptions({ fontSize: '12pt', wrap: true });
+
+      function showLoader() {
+        document.getElementById('loader').style.display = 'block';
+      }
+
+      function hideLoader() {
+        document.getElementById('loader').style.display = 'none';
+      }
+
+      function copyToClipboard() {
+        const text = editor.getValue();
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            alert('Code copied to clipboard!');
+          })
+          .catch((err) => {
+            console.error('Error in copying text: ', err);
+          });
+      }
+
+      function executeCode() {
+        showLoader();
+        const code = editor.getValue();
+        fetch('/run_code', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ code: code }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              console.error('Error:', data.error);
+              editor.setValue(data.error, -1); // Display errors in the editor
+            } else {
+              editor.setValue(data.output, -1); // Display the output in the editor
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+        hideLoader();
+      }
+
+      function clearEditor() {
+        editor.setValue('');
+      }
+
+      window.onload = function () {
+        document.getElementById('loader').style.display = 'none';
+        var initialCode = '{{ code | tojson | safe }}';
+        if (initialCode && initialCode !== 'null') {
+          editor.setValue(initialCode, -1);
+        }
+      };
+    </script>
   </body>
 </html>
